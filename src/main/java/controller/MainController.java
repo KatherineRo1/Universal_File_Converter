@@ -19,6 +19,11 @@ import java.util.logging.*;
  */
 public class MainController {
 
+    public Button imagesButton;
+    public Button textButton;
+    public Button audioButton;
+    public Button videoButton;
+    public Button historyButton;
     // Main content area (center of the layout) where views are loaded
     @FXML
     private StackPane contentArea;

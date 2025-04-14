@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
  * Stores metadata such as file name, formats, status, and timestamp.
  */
 public class ConversionHistory {
-    private String fileName;         // Name of the original file
-    private String sourceFormat;     // Original format (e.g., "png")
-    private String targetFormat;     // Converted format (e.g., "jpg")
-    private String status;           // Conversion result (e.g., "Success" or "Failed")
-    private LocalDateTime timestamp; // Time of conversion
+    private final String fileName;         // Name of the original file
+    private final String sourceFormat;     // Original format (e.g., "png")
+    private final String targetFormat;     // Converted format (e.g., "jpg")
+    private final String status;           // Conversion result (e.g., "Success" or "Failed")
+    private final LocalDateTime timestamp; // Time of conversion
 
     /**
      * Constructs a ConversionHistory record with all required fields.

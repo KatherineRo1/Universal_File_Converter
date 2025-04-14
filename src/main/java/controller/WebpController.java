@@ -31,6 +31,7 @@ public class WebpController {
 
     private final ImageConverter converter = new ImageConverter();
     private final DatabaseManager dbManager = new DatabaseManager();
+    public ImageView webpImageView;
     private List<File> selectedFiles = new ArrayList<>();
 
     @FXML private Button selectWebpFileButton;

@@ -35,5 +35,5 @@
     </VBox>
 
     <!-- Status label for showing conversion result -->
-    <Label fx:id="tiffStatusLabel" text="" styleClass="status-label"/>
+    <Label fx:id="tiffStatusLabel" styleClass="status-label"/>
 </VBox>

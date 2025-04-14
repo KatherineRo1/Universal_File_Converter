@@ -33,6 +33,7 @@ public class TiffController {
 
     // Manages database insertions for history
     private final DatabaseManager dbManager = new DatabaseManager();
+    public ImageView tiffImageView;
 
     // List of selected TIFF files for conversion
     private List<File> selectedTiffFiles = new ArrayList<>();

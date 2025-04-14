@@ -32,5 +32,5 @@
     </VBox>
 
     <!-- Label to display conversion result or error -->
-    <Label fx:id="webpStatusLabel" text="" styleClass="status-label"/>
+    <Label fx:id="webpStatusLabel" styleClass="status-label"/>
 </VBox>
