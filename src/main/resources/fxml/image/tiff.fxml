@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    FXML layout for converting TIFF files to PNG or JPG formats.
+    Provides drag-and-drop zone, manual file selection, format choice, and status updates.
+-->
+<VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.TiffController">
+
+    <!-- Title label -->
+    <Label text="Convert TIFF to PNG or JPG" styleClass="title-label"/>
+
+    <!-- Drag & Drop zone for TIFF files -->
+    <StackPane fx:id="tiffDropZone" styleClass="drop-zone">
+        <ImageView fx:id="tiffImageView" fitWidth="100" fitHeight="100" visible="false" preserveRatio="true"/>
+        <Label fx:id="tiffDropLabel"
+               text="Drag &amp; Drop TIFF file here or use Select File"
+               styleClass="drop-label"/>
+        <HBox fx:id="tiffImagePreviewContainer" spacing="10" alignment="CENTER"/>
+    </StackPane>
+
+    <!-- Output format selection -->
+    <ComboBox fx:id="tiffFormatComboBox" styleClass="dropdown" promptText="Choose output format"/>
+
+    <!-- File selection and conversion controls -->
+    <VBox spacing="10" alignment="CENTER">
+        <Button fx:id="selectTiffFileButton" text="Select TIFF File" styleClass="main-button"/>
+        <Button fx:id="convertTiffButton" text="Convert TIFF" styleClass="convert-button" disable="true"/>
+    </VBox>
+
+    <!-- Status label for showing conversion result -->
+    <Label fx:id="tiffStatusLabel" text="" styleClass="status-label"/>
+</VBox>

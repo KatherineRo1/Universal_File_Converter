@@ -1,0 +1,88 @@
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2b2b2b;
+    -fx-padding: 20 0 10 0;
+}
+
+.main-button, .convert-button {
+    -fx-background-color: #4A90E2;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-size: 14px;
+    -fx-padding: 8 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.main-button:hover, .convert-button:hover {
+    -fx-background-color: #3A78D2;
+}
+
+.status-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+    -fx-padding: 10;
+}
+
+.drop-zone {
+    -fx-border-color: #A0A0A0;
+    -fx-border-style: dashed;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 40;
+    -fx-background-color: #F9FAFD;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);
+    -fx-max-width: 400;
+}
+
+.drop-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #606060;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+}
+
+.loading-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #FF8C00;
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 5);
+}
+
+.loading-circle {
+    -fx-rotate: 0;
+    -fx-opacity: 0.6;
+}
+
+.image-preview {
+    -fx-border-radius: 10px;
+    -fx-padding: 5;
+}
+
+.image-view {
+    -fx-opacity: 0.7;
+}
+
+.convert-button:disabled {
+    -fx-background-color: #D1D1D1;
+}
+
+/* Styling for the dropdown (ComboBox) */
+.dropdown {
+    -fx-pref-width: 255;
+    -fx-pref-height: 55;
+    -fx-font-size: 16px;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #B0B0B0;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.dropdown .arrow {
+    -fx-background-color: #D0D0D0;  /* Light gray arrow */
+}
+
+.convert-button:hover, .main-button:hover {
+    -fx-cursor: hand;
+}

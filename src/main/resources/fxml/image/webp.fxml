@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    FXML layout for converting PNG/JPG images to WEBP format.
+    Includes drag-and-drop support, file picker, conversion controls, and status display.
+-->
+<VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.WebpController">
+
+    <!-- Section title -->
+    <Label text="Convert to WEBP" styleClass="title-label"/>
+
+    <!-- Drag & Drop zone for PNG or JPG files -->
+    <StackPane fx:id="webpDropZone" styleClass="drop-zone">
+        <ImageView fx:id="webpImageView" fitWidth="100" fitHeight="100" visible="false" preserveRatio="true"/>
+        <Label fx:id="webpDropLabel"
+               text="Drag &amp; Drop PNG or JPG file here or use Select File"
+               styleClass="drop-label"/>
+        <HBox fx:id="webpImagePreviewContainer" spacing="10" alignment="CENTER"/>
+    </StackPane>
+
+    <!-- Manual file selection and convert button -->
+    <VBox spacing="10" alignment="CENTER">
+        <Button fx:id="selectWebpFileButton" text="Select PNG/JPG File" styleClass="main-button"/>
+        <Button fx:id="convertWebpButton" text="Convert to WEBP" styleClass="convert-button" disable="true"/>
+    </VBox>
+
+    <!-- Label to display conversion result or error -->
+    <Label fx:id="webpStatusLabel" text="" styleClass="status-label"/>
+</VBox>

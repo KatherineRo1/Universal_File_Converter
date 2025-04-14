@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Main layout of the application using BorderPane.
+    - Top: category buttons (Images, Text, Audio, Video, History)
+    - Center: dynamic content area
+    - Right: dynamic subcategory buttons
+-->
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.MainController"
+            fx:id="mainLayout">
+
+    <!-- Top category bar -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
+            <Button fx:id="imagesButton" text="Images" onAction="#onImagesClick"/>
+            <Button fx:id="textButton" text="Text" onAction="#onTextClick"/>
+            <Button fx:id="audioButton" text="Audio" onAction="#onAudioClick"/>
+            <Button fx:id="videoButton" text="Video" onAction="#onVideoClick"/>
+
+            <!-- Spacer to push history button to the right -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Always-visible history button -->
+            <Button fx:id="historyButton" text="History" onAction="#onHistoryClick"/>
+        </HBox>
+    </top>
+
+    <!-- Center content area where converters or history are loaded -->
+    <center>
+        <StackPane fx:id="contentArea"/>
+    </center>
+
+    <!-- Right subcategory menu (changes based on selected category) -->
+    <right>
+        <VBox fx:id="subcategoryMenu" spacing="10" style="-fx-padding: 10;"/>
+    </right>
+
+</BorderPane>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<!--
+    FXML layout for the PNG ⇄ JPG converter.
+    Provides drag-and-drop and manual file selection interface with quality options.
+-->
+<VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.PngJpgController">
+
+    <!-- Title label -->
+    <Label text="Image Converter" styleClass="title-label"/>
+
+    <!-- Drag & Drop zone -->
+    <StackPane fx:id="dropZone" styleClass="drop-zone">
+        <ImageView fx:id="imageView" fitWidth="100" fitHeight="100" visible="false" preserveRatio="true"/>
+        <Label fx:id="dropLabel"
+               text="Drag &amp; Drop image file here or use Select File"
+               styleClass="drop-label"/>
+        <HBox fx:id="imagePreviewContainer" spacing="10" alignment="CENTER"/>
+    </StackPane>
+
+    <!-- Output format selection -->
+    <ComboBox fx:id="formatComboBox" styleClass="dropdown" promptText="Choose output format"/>
+
+    <!-- Quality and control buttons -->
+    <VBox spacing="10" alignment="CENTER" fx:id="qualityContainer">
+
+        <!-- JPG quality options -->
+        <ComboBox fx:id="qualityComboBox"
+                  styleClass="dropdown"
+                  promptText="Choose JPG quality"
+                  disable="true"
+        />
+
+        <!-- File selection and conversion buttons -->
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="selectFileButton" text="Select Image File" styleClass="main-button"/>
+            <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
+        </VBox>
+
+        <!-- Conversion status -->
+        <Label fx:id="statusLabel" styleClass="status-label"/>
+    </VBox>
+</VBox>
