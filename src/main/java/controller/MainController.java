@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -24,6 +25,7 @@ public class MainController {
     public Button audioButton;
     public Button videoButton;
     public Button historyButton;
+    public BorderPane mainLayout;
     // Main content area (center of the layout) where views are loaded
     @FXML
     private StackPane contentArea;

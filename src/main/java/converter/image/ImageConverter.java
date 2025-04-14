@@ -120,26 +120,4 @@ public class ImageConverter {
         return newImage;
     }
 
-    /**
-     * Converts HEIC images to the specified format using FFmpeg.
-     */
-    public void convertHeicWithFFmpeg(File inputFile, String outputFormat, File outputFile)
-            throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "ffmpeg",
-                "-i", inputFile.getAbsolutePath(),
-                outputFile.getAbsolutePath()
-        );
-
-        Process process = processBuilder.start();
-        int exitCode = process.waitFor();
-
-        if (exitCode != 0) {
-            String msg = "FFmpeg failed with exit code: " + exitCode;
-            logger.severe(msg);
-            throw new IOException(msg);
-        }
-
-        logger.info("HEIC image successfully converted using FFmpeg to: " + outputFile.getAbsolutePath());
-    }
 }

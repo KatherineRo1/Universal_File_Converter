@@ -19,6 +19,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.*;
 
 /**
@@ -77,7 +78,7 @@ public class TiffController {
                 );
                 selectedTiffFiles = chooser.showOpenMultipleDialog(new Stage());
                 if (selectedTiffFiles != null && !selectedTiffFiles.isEmpty()) {
-                    if (!validateTiffFiles(selectedTiffFiles)) return;
+                    if (validateTiffFiles(selectedTiffFiles)) return;
                     convertTiffButton.setDisable(false);
                     tiffDropLabel.setVisible(false);
                     showMultipleIcons(selectedTiffFiles);
@@ -102,14 +103,15 @@ public class TiffController {
                 Dragboard db = e.getDragboard();
                 if (db.hasFiles()) {
                     selectedTiffFiles = db.getFiles();
-                    if (!validateTiffFiles(selectedTiffFiles)) {
-                        e.setDropCompleted(false);
-                    } else {
+                    if (validateTiffFiles(selectedTiffFiles)) {
                         convertTiffButton.setDisable(false);
                         tiffDropLabel.setVisible(false);
                         showMultipleIcons(selectedTiffFiles);
                         e.setDropCompleted(true);
+                    } else {
+                        e.setDropCompleted(false);
                     }
+
                 } else {
                     e.setDropCompleted(false);
                 }
@@ -178,7 +180,7 @@ public class TiffController {
                 default -> null;
             };
             if (iconPath != null) {
-                ImageView icon = new ImageView(new Image(getClass().getResource(iconPath).toExternalForm()));
+                ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResource(iconPath)).toExternalForm()));
                 icon.setFitWidth(50);
                 icon.setFitHeight(50);
                 icon.setPreserveRatio(true);

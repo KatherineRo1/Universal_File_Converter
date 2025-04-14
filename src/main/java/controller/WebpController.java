@@ -20,6 +20,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
@@ -29,7 +30,6 @@ import java.util.logging.*;
  */
 public class WebpController {
 
-    private final ImageConverter converter = new ImageConverter();
     private final DatabaseManager dbManager = new DatabaseManager();
     public ImageView webpImageView;
     private List<File> selectedFiles = new ArrayList<>();
@@ -135,7 +135,7 @@ public class WebpController {
     /**
      * Uses FFmpeg via ProcessBuilder to convert input image to WEBP format in a background thread.
      */
-    private void convertToWebpWithFFmpeg(File inputFile, File outputFile) throws IOException {
+    private void convertToWebpWithFFmpeg(File inputFile, File outputFile) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
@@ -220,7 +220,7 @@ public class WebpController {
                 default -> null;
             };
             if (iconPath != null) {
-                ImageView icon = new ImageView(new Image(getClass().getResource(iconPath).toExternalForm()));
+                ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResource(iconPath)).toExternalForm()));
                 icon.setFitWidth(50);
                 icon.setFitHeight(50);
                 icon.setPreserveRatio(true);

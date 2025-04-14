@@ -20,6 +20,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.*;
 
 /**
@@ -34,6 +35,7 @@ public class PngJpgController {
     // Database manager for storing history entries
     private final DatabaseManager dbManager = new DatabaseManager();
     public ImageView imageView;
+    public VBox qualityContainer;
 
     // Selected files to convert
     private List<File> selectedFiles = new ArrayList<>();
@@ -46,7 +48,6 @@ public class PngJpgController {
     @FXML private Label statusLabel;
     @FXML private StackPane dropZone;
     @FXML private Label dropLabel;
-    @FXML private VBox qualityContainer;
     @FXML private HBox imagePreviewContainer;
 
     // Logger for error tracking
@@ -175,7 +176,7 @@ public class PngJpgController {
                 default -> null;
             };
             if (iconPath != null) {
-                ImageView icon = new ImageView(new Image(getClass().getResource(iconPath).toExternalForm()));
+                ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResource(iconPath)).toExternalForm()));
                 icon.setFitWidth(50);
                 icon.setFitHeight(50);
                 icon.setPreserveRatio(true);
@@ -192,4 +193,5 @@ public class PngJpgController {
         int dotIndex = name.lastIndexOf(".");
         return dotIndex > 0 ? name.substring(dotIndex + 1).toLowerCase() : "";
     }
+
 }
