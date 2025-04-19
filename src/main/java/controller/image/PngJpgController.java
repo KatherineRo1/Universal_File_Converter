@@ -10,7 +10,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.ConversionHistory;
@@ -35,7 +34,6 @@ public class PngJpgController {
     // Database manager for storing history entries
     private final DatabaseManager dbManager = new DatabaseManager();
     public ImageView imageView;
-    public VBox qualityContainer;
 
     // Selected files to convert
     private List<File> selectedFiles = new ArrayList<>();

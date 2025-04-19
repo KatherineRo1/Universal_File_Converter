@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.ConversionHistory;
 import model.DatabaseManager;
@@ -24,6 +25,7 @@ public class TextConverterController {
 
     private final TextConverter converter = new TextConverter();              // Converter logic for TXT → XLSX
     private final DatabaseManager dbManager = new DatabaseManager();          // Handles conversion history saving
+    public VBox txtToXlsxPane;
     private File selectedFile;                                                // Currently selected input file
 
     @FXML private ComboBox<String> delimiterComboBox;                         // Drop-down to choose delimiter
@@ -32,10 +34,6 @@ public class TextConverterController {
     @FXML private Button convertButton;                                       // Button to start conversion
     @FXML private Label statusLabel;                                          // Label to display status messages
     @FXML private StackPane dropZone;                                         // Drag-and-drop file input area
-    @FXML private Button txtToXlsxButton;                                     // Subcategory navigation (not active here)
-    @FXML private Button csvToXlsxButton;
-    @FXML private Button pdfToPngButton;
-
     /**
      * Initializes UI components and sets up all event listeners.
      */
