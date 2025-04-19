@@ -11,10 +11,10 @@
 <VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.WebpController">
+      fx:controller="controller.image.WebpController">
 
     <!-- Section title -->
-    <Label text="Convert to WEBP" styleClass="title-label"/>
+    <Label text="PNG/JPG→WEBP Converter" styleClass="title-label"/>
 
     <!-- Drag & Drop zone for PNG or JPG files -->
     <StackPane fx:id="webpDropZone" styleClass="drop-zone">

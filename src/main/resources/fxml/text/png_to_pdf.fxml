@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    FXML layout for PNG → PDF conversion.
+-->
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.text.PngToPdfController"
+            stylesheets="@/css/styles.css">
+
+    <HBox spacing="10"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          styleClass="content-root">
+
+        <!-- Main pane -->
+        <VBox spacing="20"
+              alignment="TOP_CENTER"
+              prefWidth="800"
+              maxWidth="800"
+              HBox.hgrow="ALWAYS"
+              styleClass="main-pane">
+
+            <Label text="PNG/JPG→PDF Converter" styleClass="title-label"/>
+
+            <!-- Drop zone -->
+            <StackPane fx:id="dropZone"
+                       styleClass="drop-zone"
+                       prefHeight="200"
+                       maxWidth="600">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label fx:id="dropLabel"
+                           text="Drag &amp; Drop PNG or JPG files here or use Select File"
+                           styleClass="drop-label"/>
+                    <HBox fx:id="imagePreviewContainer" spacing="10" alignment="CENTER"/>
+                </VBox>
+            </StackPane>
+
+            <!-- Compress checkbox -->
+            <CheckBox fx:id="compressCheckbox" text="Compress images before export"/>
+
+            <!-- Control buttons -->
+            <VBox spacing="10" alignment="CENTER">
+                <Button fx:id="selectFileButton" text="Select PNG/JPG File" styleClass="main-button"/>
+                <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
+            </VBox>
+
+            <!-- Status label -->
+            <Label fx:id="statusLabel"
+                   styleClass="status-label"/>
+        </VBox>
+    </HBox>
+</AnchorPane>

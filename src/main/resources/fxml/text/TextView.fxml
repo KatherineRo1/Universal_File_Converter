@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Unified layout for TXT → XLSX converter.
+-->
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.text.TextConverterController"
+            stylesheets="@/css/styles.css">
+
+    <HBox spacing="10"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          styleClass="content-root">
+
+        <!-- Main converter pane -->
+        <VBox fx:id="txtToXlsxPane"
+              spacing="20"
+              alignment="TOP_CENTER"
+              prefWidth="800"
+              maxWidth="800"
+              HBox.hgrow="ALWAYS"
+              styleClass="main-pane">
+
+            <!-- Title -->
+            <Label text="TXT→XLSX Converter" styleClass="title-label"/>
+
+            <!-- Drag and drop zone -->
+            <StackPane fx:id="dropZone"
+                       styleClass="drop-zone"
+                       prefHeight="200"
+                       maxWidth="600">
+                <Label text="Drag &amp; Drop text file here or use Select File" styleClass="drop-label"/>
+            </StackPane>
+
+
+            <!-- Delimiter section -->
+            <VBox spacing="10" alignment="CENTER" maxWidth="255">
+                <ComboBox fx:id="delimiterComboBox"
+                          prefWidth="255"
+                          prefHeight="55"
+                          promptText="Choose delimiter"
+                          styleClass="dropdown"/>
+                <TextField fx:id="customDelimiterField"
+                           promptText="Enter custom delimiter"
+                           prefWidth="255"
+                           visible="false"/>
+            </VBox>
+
+            <!-- Buttons section -->
+            <VBox spacing="10" alignment="CENTER">
+                <Button fx:id="selectFileButton" text="Select Text File" styleClass="main-button"/>
+                <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
+            </VBox>
+
+            <!-- Status label -->
+            <Label fx:id="statusLabel" styleClass="status-label"/>
+        </VBox>
+    </HBox>
+</AnchorPane>

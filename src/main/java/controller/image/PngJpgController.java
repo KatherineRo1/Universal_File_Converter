@@ -1,4 +1,4 @@
-package controller;
+package controller.image;
 
 import converter.image.ImageConverter;
 import javafx.fxml.FXML;
@@ -107,12 +107,27 @@ public class PngJpgController {
         dropZone.setOnDragDropped((DragEvent e) -> {
             Dragboard db = e.getDragboard();
             if (db.hasFiles()) {
-                selectedFiles = db.getFiles();
-                convertButton.setDisable(false);
-                dropLabel.setVisible(false);
-                showMultipleIcons(selectedFiles);
-                e.setDropCompleted(true);
-            } else {
+                List<File> validFiles = new ArrayList<>();
+                for (File file : db.getFiles()) {
+                    String ext = getFileExtension(file);
+                    if (ext.equals("png") || ext.equals("jpg") || ext.equals("jpeg")) {
+                        validFiles.add(file);
+                    }
+                }
+
+                if (!validFiles.isEmpty()) {
+                    selectedFiles = validFiles;
+                    convertButton.setDisable(false);
+                    dropLabel.setVisible(false);
+                    showMultipleIcons(selectedFiles);
+                    statusLabel.setText("Loaded " + selectedFiles.size() + " image(s).");
+                    e.setDropCompleted(true);
+                } else {
+                    statusLabel.setText("Please drop PNG or JPG image files.");
+                    e.setDropCompleted(false);
+                }
+            }
+            else {
                 e.setDropCompleted(false);
             }
             e.consume();

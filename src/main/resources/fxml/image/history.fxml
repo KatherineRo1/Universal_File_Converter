@@ -10,7 +10,7 @@
 -->
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.HistoryController"
+      fx:controller="controller.image.HistoryController"
       alignment="TOP_CENTER"
       spacing="10">
 

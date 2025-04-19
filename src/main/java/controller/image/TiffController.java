@@ -1,4 +1,4 @@
-package controller;
+package controller.image;
 
 import converter.image.ImageConverter;
 import javafx.fxml.FXML;
@@ -109,10 +109,11 @@ public class TiffController {
                         showMultipleIcons(selectedTiffFiles);
                         e.setDropCompleted(true);
                     } else {
+                        tiffStatusLabel.setText("Only TIFF files are allowed.");
                         e.setDropCompleted(false);
                     }
-
-                } else {
+                }
+                else {
                     e.setDropCompleted(false);
                 }
             } catch (Exception ex) {

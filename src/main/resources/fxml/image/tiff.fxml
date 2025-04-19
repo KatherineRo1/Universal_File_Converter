@@ -11,10 +11,10 @@
 <VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.TiffController">
+      fx:controller="controller.image.TiffController">
 
     <!-- Title label -->
-    <Label text="Convert TIFF to PNG or JPG" styleClass="title-label"/>
+    <Label text="TIFF→PNG/JPG Converter" styleClass="title-label"/>
 
     <!-- Drag & Drop zone for TIFF files -->
     <StackPane fx:id="tiffDropZone" styleClass="drop-zone">

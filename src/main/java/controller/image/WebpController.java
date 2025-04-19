@@ -1,6 +1,5 @@
-package controller;
+package controller.image;
 
-import converter.image.ImageConverter;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -91,12 +90,27 @@ public class WebpController {
             try {
                 Dragboard db = e.getDragboard();
                 if (db.hasFiles()) {
-                    selectedFiles = db.getFiles();
-                    convertWebpButton.setDisable(false);
-                    webpDropLabel.setVisible(false);
-                    showMultipleIcons(selectedFiles);
-                    e.setDropCompleted(true);
-                } else {
+                    List<File> validFiles = new ArrayList<>();
+                    for (File file : db.getFiles()) {
+                        String ext = getFileExtension(file);
+                        if (ext.equals("png") || ext.equals("jpg") || ext.equals("jpeg")) {
+                            validFiles.add(file);
+                        }
+                    }
+
+                    if (!validFiles.isEmpty()) {
+                        selectedFiles = validFiles;
+                        convertWebpButton.setDisable(false);
+                        webpDropLabel.setVisible(false);
+                        showMultipleIcons(validFiles);
+                        webpStatusLabel.setText("Loaded " + validFiles.size() + " image(s).");
+                        e.setDropCompleted(true);
+                    } else {
+                        webpStatusLabel.setText("Please drop PNG or JPG image files.");
+                        e.setDropCompleted(false);
+                    }
+                }
+                else {
                     e.setDropCompleted(false);
                 }
             } catch (Exception ex) {

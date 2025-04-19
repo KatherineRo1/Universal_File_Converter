@@ -3,20 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+
 <!--
     FXML layout for the PNG ⇄ JPG converter.
-    Provides drag-and-drop and manual file selection interface with quality options.
+    Matches the spacing and layout of the text converter for consistency.
 -->
-<VBox spacing="20" alignment="TOP_CENTER" prefWidth="800"
+<VBox spacing="20" alignment="TOP_CENTER" prefWidth="800" maxWidth="800"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.PngJpgController">
+      fx:controller="controller.image.PngJpgController"
+      styleClass="main-pane">
 
     <!-- Title label -->
-    <Label text="Image Converter" styleClass="title-label"/>
+    <Label text="PNG⇄JPG Converter" styleClass="title-label"/>
 
     <!-- Drag & Drop zone -->
-    <StackPane fx:id="dropZone" styleClass="drop-zone">
+    <StackPane fx:id="dropZone" styleClass="drop-zone" prefHeight="200" maxWidth="600">
         <ImageView fx:id="imageView" fitWidth="100" fitHeight="100" visible="false" preserveRatio="true"/>
         <Label fx:id="dropLabel"
                text="Drag &amp; Drop image file here or use Select File"
@@ -25,25 +27,32 @@
     </StackPane>
 
     <!-- Output format selection -->
-    <ComboBox fx:id="formatComboBox" styleClass="dropdown" promptText="Choose output format"/>
+    <ComboBox fx:id="formatComboBox"
+              styleClass="dropdown"
+              promptText="Choose output format"
+              prefWidth="255"
+              prefHeight="55"
+              maxWidth="255"/>
 
-    <!-- Quality and control buttons -->
-    <VBox spacing="10" alignment="CENTER" fx:id="qualityContainer">
+    <!-- Quality and control buttons stacked vertically -->
+    <VBox spacing="10" alignment="CENTER">
 
         <!-- JPG quality options -->
         <ComboBox fx:id="qualityComboBox"
                   styleClass="dropdown"
                   promptText="Choose JPG quality"
                   disable="true"
-        />
+                  prefWidth="255"
+                  prefHeight="55"
+                  maxWidth="255"/>
 
-        <!-- File selection and conversion buttons -->
+        <!-- File selection and conversion buttons stacked -->
         <VBox spacing="10" alignment="CENTER">
             <Button fx:id="selectFileButton" text="Select Image File" styleClass="main-button"/>
             <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
         </VBox>
-
-        <!-- Conversion status -->
-        <Label fx:id="statusLabel" styleClass="status-label"/>
     </VBox>
+
+    <!-- Conversion status -->
+    <Label fx:id="statusLabel" styleClass="status-label"/>
 </VBox>

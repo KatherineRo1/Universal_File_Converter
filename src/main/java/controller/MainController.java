@@ -84,6 +84,8 @@ public class MainController {
         addSubcategoryButton("PNG/JPG → WEBP", () -> loadImageSubcategory("/fxml/image/webp.fxml"));
         addSubcategoryButton("TIFF → PNG/JPG", () -> loadImageSubcategory("/fxml/image/tiff.fxml"));
 
+        loadImageSubcategory("/fxml/image/png_jpg.fxml");
+
         logger.info("Loaded image conversion view with subcategories.");
     }
 
@@ -125,6 +127,21 @@ public class MainController {
             showError("Unable to load the selected subcategory.");
         }
     }
+    /**
+     * Loads a subcategory FXML view for text conversion into the center content area.
+     */
+    private void loadTextSubcategory(String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Node subView = loader.load();
+            contentArea.getChildren().setAll(subView);
+            logger.fine("Loaded text subcategory view: " + fxmlPath);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load text subcategory FXML: " + fxmlPath, e);
+            showError("Unable to load the selected subcategory.");
+        }
+    }
+
 
     /**
      * Dynamically adds a button to the subcategory sidebar.
@@ -143,9 +160,26 @@ public class MainController {
      */
     @FXML
     private void onTextClick() {
-        logger.info("Text converter view requested (not yet implemented).");
-        // TODO: Implement text converter
+        try {
+            subcategoryMenu.getChildren().clear();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/text/TextView.fxml"));
+            Node view = loader.load();
+            contentArea.getChildren().setAll(view);
+
+            addSubcategoryButton("TXT → XLSX", () -> loadTextSubcategory("/fxml/text/TextView.fxml"));
+            addSubcategoryButton("CSV → XLSX", () -> loadTextSubcategory("/fxml/text/csv.fxml"));
+            addSubcategoryButton("PNG → PDF", () -> loadTextSubcategory("/fxml/text/png_to_pdf.fxml"));
+
+
+            logger.info("Loaded text converter view with subcategories.");
+
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load TextView.fxml", e);
+            showError("Failed to load the text converter interface.");
+        }
     }
+
 
     /**
      * Placeholder for loading the Audio converter category.
