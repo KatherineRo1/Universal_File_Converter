@@ -62,11 +62,11 @@ public class DatabaseManager {
                 "(file_name, source_format, target_format, status, timestamp) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, history.getFileName());
-            pstmt.setString(2, history.getSourceFormat());
-            pstmt.setString(3, history.getTargetFormat());
-            pstmt.setString(4, history.getStatus());
-            pstmt.setString(5, history.getTimestamp().toString());
+            pstmt.setString(1, history.fileName());
+            pstmt.setString(2, history.sourceFormat());
+            pstmt.setString(3, history.targetFormat());
+            pstmt.setString(4, history.status());
+            pstmt.setString(5, history.timestamp().toString());
             pstmt.executeUpdate();
             logger.info("Inserted history: " + history);
         } catch (SQLException e) {

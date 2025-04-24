@@ -4,11 +4,12 @@
 <?import javafx.scene.layout.*?>
 
 <!--
-    FXML layout for CSV → XLSX converter with file icon preview (auto-detect delimiter only).
+    Audio Converter UI for converting WAV, FLAC, AAC, and OGG to MP3.
+    Supports drag & drop and file selection.
 -->
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.text.CsvToXlsxController"
+            fx:controller="controller.audio.AudioController"
             stylesheets="@/css/styles.css">
 
     <HBox spacing="10"
@@ -18,7 +19,7 @@
           AnchorPane.rightAnchor="0"
           styleClass="content-root">
 
-        <!-- Main converter pane -->
+        <!-- Main converter area -->
         <VBox spacing="20"
               alignment="TOP_CENTER"
               prefWidth="800"
@@ -26,31 +27,27 @@
               HBox.hgrow="ALWAYS"
               styleClass="main-pane">
 
-            <!-- Title -->
-            <Label text="CSV→XLSX Converter" styleClass="title-label"/>
+            <Label text="Audio Converter" styleClass="title-label"/>
 
-            <!-- Drag and drop zone -->
+            <!-- Drop zone for drag & drop -->
             <StackPane fx:id="dropZone"
                        styleClass="drop-zone"
                        prefHeight="200"
                        maxWidth="600">
-                <VBox alignment="CENTER" spacing="10">
-                    <Label fx:id="dropLabel"
-                           text="Drag &amp; Drop CSV file here or use Select File"
+                <VBox alignment="CENTER">
+                    <Label fx:id="dropLabel" text="Drag &amp; Drop audio files here or use Select File"
                            styleClass="drop-label"/>
-                    <HBox fx:id="previewContainer"
-                          alignment="CENTER"
-                          spacing="10"/>
+                    <HBox fx:id="previewContainer" spacing="10" alignment="CENTER"/>
                 </VBox>
             </StackPane>
 
-            <!-- Buttons section -->
+            <!-- Action buttons -->
             <VBox spacing="10" alignment="CENTER">
-                <Button fx:id="selectFileButton" text="Select CSV File" styleClass="main-button"/>
-                <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
+                <Button fx:id="selectFileButton" text="Select Audio Files" styleClass="main-button"/>
+                <Button fx:id="convertButton" text="Convert to MP3" styleClass="convert-button" disable="true"/>
             </VBox>
 
-            <!-- Status label -->
+            <!-- Status display -->
             <Label fx:id="statusLabel"
                    styleClass="status-label"/>
         </VBox>

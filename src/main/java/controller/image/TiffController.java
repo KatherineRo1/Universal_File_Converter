@@ -1,3 +1,4 @@
+// TiffController.java — conversion of TIFF to PNG/JPG with full inline comments
 package controller.image;
 
 import converter.image.ImageConverter;
@@ -22,24 +23,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.*;
 
-/**
- * Controller for handling TIFF to PNG/JPG conversions.
- * Supports drag-and-drop, file picking, format selection,
- * and preview display of selected files.
- */
 public class TiffController {
 
-    // Handles conversion logic
+    // Converter instance responsible for transforming image files
     private final ImageConverter converter = new ImageConverter();
 
-    // Manages database insertions for history
+    // Handles conversion history database operations
     private final DatabaseManager dbManager = new DatabaseManager();
+
+    // Image preview container in the UI (optional use)
     public ImageView tiffImageView;
 
-    // List of selected TIFF files for conversion
+    // List of TIFF files selected for conversion
     private List<File> selectedTiffFiles = new ArrayList<>();
 
-    // UI components from FXML
+    // UI controls injected from FXML
     @FXML private Button selectTiffFileButton;
     @FXML private Button convertTiffButton;
     @FXML private Label tiffStatusLabel;
@@ -48,7 +46,7 @@ public class TiffController {
     @FXML private Label tiffDropLabel;
     @FXML private HBox tiffImagePreviewContainer;
 
-    // Logger for tracking errors and events
+    // Logger setup for writing logs to a file
     private static final Logger logger = Logger.getLogger(TiffController.class.getName());
 
     static {
@@ -63,13 +61,15 @@ public class TiffController {
     }
 
     /**
-     * Initializes the controller, sets up drag-and-drop, buttons, and format options.
+     * Initializes the controller after FXML loading: sets up format selection,
+     * drag-and-drop behavior, and file selection buttons.
      */
     @FXML
     public void initialize() {
+        // Add target formats for conversion
         tiffFormatComboBox.getItems().addAll("png", "jpg");
 
-        // File picker action
+        // Handle manual file selection via FileChooser
         selectTiffFileButton.setOnAction(e -> {
             try {
                 FileChooser chooser = new FileChooser();
@@ -78,7 +78,7 @@ public class TiffController {
                 );
                 selectedTiffFiles = chooser.showOpenMultipleDialog(new Stage());
                 if (selectedTiffFiles != null && !selectedTiffFiles.isEmpty()) {
-                    if (validateTiffFiles(selectedTiffFiles)) return;
+                    if (!validateTiffFiles(selectedTiffFiles)) return;
                     convertTiffButton.setDisable(false);
                     tiffDropLabel.setVisible(false);
                     showMultipleIcons(selectedTiffFiles);
@@ -89,7 +89,7 @@ public class TiffController {
             }
         });
 
-        // Drag-over behavior
+        // Handle drag-over event to indicate drop zone is ready
         tiffDropZone.setOnDragOver(e -> {
             if (e.getGestureSource() != tiffDropZone && e.getDragboard().hasFiles()) {
                 e.acceptTransferModes(TransferMode.COPY);
@@ -97,7 +97,7 @@ public class TiffController {
             e.consume();
         });
 
-        // Handle file drop
+        // Handle actual drop of files
         tiffDropZone.setOnDragDropped((DragEvent e) -> {
             try {
                 Dragboard db = e.getDragboard();
@@ -112,8 +112,7 @@ public class TiffController {
                         tiffStatusLabel.setText("Only TIFF files are allowed.");
                         e.setDropCompleted(false);
                     }
-                }
-                else {
+                } else {
                     e.setDropCompleted(false);
                 }
             } catch (Exception ex) {
@@ -123,11 +122,13 @@ public class TiffController {
             e.consume();
         });
 
+        // Start conversion process when button is clicked
         convertTiffButton.setOnAction(e -> convertTiffFiles());
     }
 
     /**
-     * Converts selected TIFF files into the chosen format and updates history.
+     * Converts all selected TIFF files to the chosen format.
+     * Builds a status message listing successful and failed conversions.
      */
     private void convertTiffFiles() {
         String format = tiffFormatComboBox.getValue();
@@ -136,25 +137,35 @@ public class TiffController {
             return;
         }
 
+        StringBuilder result = new StringBuilder("Conversion results:\n");
+
         for (File file : selectedTiffFiles) {
             try {
                 String baseName = file.getName().replaceAll("\\.[^.]+$", "");
                 File outputFile = new File(file.getParent() + File.separator + baseName + "_converted." + format);
-                converter.convert(file, format, outputFile, 1.0f);
-                tiffStatusLabel.setText("Saved: " + outputFile.getName());
 
+                // Perform the conversion using the image converter class
+                converter.convert(file, format, outputFile, 1.0f);
+
+                // Append success info to result message
+                result.append("• ").append(outputFile.getName()).append("\n");
+
+                // Save conversion to history
                 dbManager.insertHistory(new ConversionHistory(
                         file.getName(), getFileExtension(file), format, "Success", LocalDateTime.now()
                 ));
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Conversion failed for: " + file.getName(), ex);
-                tiffStatusLabel.setText("Failed: " + ex.getMessage());
+                result.append("× ").append(file.getName()).append(" (Failed: ").append(ex.getMessage()).append(")\n");
             }
         }
+
+        // Show results to the user
+        tiffStatusLabel.setText(result.toString());
     }
 
     /**
-     * Validates that all selected files are valid TIFF files.
+     * Ensures that all files in the list are valid TIFF files.
      */
     private boolean validateTiffFiles(List<File> files) {
         for (File file : files) {
@@ -168,7 +179,7 @@ public class TiffController {
     }
 
     /**
-     * Displays file type icons in the preview panel for the selected TIFF files.
+     * Displays icon previews for each selected file in the preview area.
      */
     private void showMultipleIcons(List<File> files) {
         tiffImagePreviewContainer.getChildren().clear();
@@ -191,7 +202,7 @@ public class TiffController {
     }
 
     /**
-     * Returns the file extension (without the dot) in lowercase.
+     * Returns the extension of a file, in lowercase, without the dot.
      */
     private String getFileExtension(File file) {
         String name = file.getName();

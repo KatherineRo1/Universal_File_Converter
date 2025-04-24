@@ -42,7 +42,6 @@
               spacing="10"
               prefWidth="220"
               style="-fx-padding: 10;"/>
-
     </right>
 
 </BorderPane>

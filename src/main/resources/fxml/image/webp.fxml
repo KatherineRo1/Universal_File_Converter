@@ -27,7 +27,7 @@
 
     <!-- Manual file selection and convert button -->
     <VBox spacing="10" alignment="CENTER">
-        <Button fx:id="selectWebpFileButton" text="Select PNG/JPG File" styleClass="main-button"/>
+        <Button fx:id="selectWebpFileButton" text="Select PNG/JPG Files" styleClass="main-button"/>
         <Button fx:id="convertWebpButton" text="Convert to WEBP" styleClass="convert-button" disable="true"/>
     </VBox>
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Video Converter UI for converting MP4 to AVI/MKV/MOV/WEBM.
+    Based on the audio converter layout.
+-->
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.video.VideoController"
+            stylesheets="@/css/styles.css">
+
+    <HBox spacing="10"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          styleClass="content-root">
+
+        <!-- Main converter area -->
+        <VBox spacing="20"
+              alignment="TOP_CENTER"
+              prefWidth="800"
+              maxWidth="800"
+              HBox.hgrow="ALWAYS"
+              styleClass="main-pane">
+
+            <Label text="Video Converter" styleClass="title-label"/>
+
+            <!-- Drop zone for drag & drop -->
+            <StackPane fx:id="dropZone"
+                       styleClass="drop-zone"
+                       prefHeight="200"
+                       maxWidth="600">
+                <VBox alignment="CENTER">
+                    <Label fx:id="dropLabel" text="Drag &amp; Drop video files here or use Select File"
+                           styleClass="drop-label"/>
+                    <HBox fx:id="previewContainer" spacing="10" alignment="CENTER"/>
+                </VBox>
+            </StackPane>
+
+            <!-- Format selection and action buttons -->
+            <VBox spacing="10" alignment="CENTER">
+                <ComboBox fx:id="formatComboBox" promptText="Select Output Format"
+                          prefWidth="255" prefHeight="55"/>
+                <Button fx:id="selectFileButton"
+                        text="Select Video Files"
+                        onAction="#onSelectFileClick"
+                        styleClass="main-button"/>
+                <Button fx:id="convertButton"
+                        text="Convert Video"
+                        onAction="#onConvertClick"
+                        styleClass="convert-button"
+                        disable="true"/>
+            </VBox>
+
+            <!-- Status display -->
+            <Label fx:id="statusLabel" styleClass="status-label"/>
+        </VBox>
+    </HBox>
+</AnchorPane>

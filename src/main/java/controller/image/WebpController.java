@@ -14,7 +14,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.ConversionHistory;
 import model.DatabaseManager;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,10 +22,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
-/**
- * Controller for converting PNG/JPG images to WEBP format using FFmpeg.
- * Supports drag & drop, file chooser, real-time status, and conversion history.
- */
 public class WebpController {
 
     private final DatabaseManager dbManager = new DatabaseManager();
@@ -54,11 +49,11 @@ public class WebpController {
     }
 
     /**
-     * Sets up the UI components and event handlers after the FXML is loaded.
+     * Initializes UI and event bindings.
      */
     @FXML
     public void initialize() {
-        // File chooser button
+        // File chooser button handler
         selectWebpFileButton.setOnAction(e -> {
             try {
                 FileChooser chooser = new FileChooser();
@@ -77,7 +72,7 @@ public class WebpController {
             }
         });
 
-        // Drag-over for drop zone
+        // Drag-and-drop support
         webpDropZone.setOnDragOver(e -> {
             if (e.getGestureSource() != webpDropZone && e.getDragboard().hasFiles()) {
                 e.acceptTransferModes(TransferMode.COPY);
@@ -85,7 +80,6 @@ public class WebpController {
             e.consume();
         });
 
-        // Handle drop
         webpDropZone.setOnDragDropped((DragEvent e) -> {
             try {
                 Dragboard db = e.getDragboard();
@@ -103,14 +97,13 @@ public class WebpController {
                         convertWebpButton.setDisable(false);
                         webpDropLabel.setVisible(false);
                         showMultipleIcons(validFiles);
-                        webpStatusLabel.setText("Loaded " + validFiles.size() + " image(s).");
+                        webpStatusLabel.setText("Loaded " + validFiles.size() + " image(s).\n");
                         e.setDropCompleted(true);
                     } else {
                         webpStatusLabel.setText("Please drop PNG or JPG image files.");
                         e.setDropCompleted(false);
                     }
-                }
-                else {
+                } else {
                     e.setDropCompleted(false);
                 }
             } catch (Exception ex) {
@@ -120,78 +113,65 @@ public class WebpController {
             e.consume();
         });
 
-        convertWebpButton.setOnAction(e -> handleWebpConversion());
+        // Start conversion on click
+        convertWebpButton.setOnAction(e -> convertToWebpWithFFmpeg(selectedFiles));
     }
 
     /**
-     * Starts WEBP conversion for selected files.
+     * Launches a background task to convert a list of files to WEBP using FFmpeg.
      */
-    private void handleWebpConversion() {
-        for (File file : selectedFiles) {
-            try {
-                if (!checkImageSizeWithinWebpLimits(file)) continue;
-
-                String baseName = file.getName().replaceAll("\\.[^.]+$", "");
-                File outputFile = new File(file.getParent() + File.separator + baseName + ".webp");
-
-                convertToWebpWithFFmpeg(file, outputFile);
-
-                dbManager.insertHistory(new ConversionHistory(
-                        file.getName(), getFileExtension(file), "webp", "Success", LocalDateTime.now()
-                ));
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Conversion failed for file: " + file.getName(), ex);
-                webpStatusLabel.setText("Failed: " + ex.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Uses FFmpeg via ProcessBuilder to convert input image to WEBP format in a background thread.
-     */
-    private void convertToWebpWithFFmpeg(File inputFile, File outputFile) {
-        Task<Void> task = new Task<>() {
+    private void convertToWebpWithFFmpeg(List<File> inputFiles) {
+        Task<String> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
-                updateMessage("Converting...");
+            protected String call() throws Exception {
+                StringBuilder result = new StringBuilder("Files converted:\n");
+                for (File inputFile : inputFiles) {
+                    if (!checkImageSizeWithinWebpLimits(inputFile)) continue;
 
-                String[] command = {
-                        "ffmpeg", "-y",
-                        "-i", inputFile.getAbsolutePath(),
-                        "-c:v", "libwebp",
-                        outputFile.getAbsolutePath()
-                };
+                    String baseName = inputFile.getName().replaceAll("\\.[^.]+$", "");
+                    File outputFile = new File(inputFile.getParent(), baseName + ".webp");
 
-                ProcessBuilder builder = new ProcessBuilder(command);
-                builder.redirectErrorStream(true);
-                Process process = builder.start();
+                    String[] command = {
+                            "ffmpeg", "-y",
+                            "-i", inputFile.getAbsolutePath(),
+                            "-c:v", "libwebp",
+                            outputFile.getAbsolutePath()
+                    };
 
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        logger.fine("[FFmpeg] " + line);
+                    ProcessBuilder builder = new ProcessBuilder(command);
+                    builder.redirectErrorStream(true);
+                    Process process = builder.start();
+
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            logger.fine("[FFmpeg] " + line);
+                        }
+                    }
+
+                    boolean finished = process.waitFor(15, TimeUnit.SECONDS);
+                    int exitCode = process.exitValue();
+
+                    if (!finished) {
+                        process.destroyForcibly();
+                        result.append("× ").append(inputFile.getName()).append(" (Timed out)\n");
+                    } else if (exitCode != 0) {
+                        result.append("× ").append(inputFile.getName()).append(" (Failed: Exit code ").append(exitCode).append(")\n");
+                    } else {
+                        result.append("• ").append(outputFile.getName()).append("\n");
+
+                        dbManager.insertHistory(new ConversionHistory(
+                                inputFile.getName(), getFileExtension(inputFile), "webp", "Success", LocalDateTime.now()
+                        ));
                     }
                 }
-
-                boolean finished = process.waitFor(15, TimeUnit.SECONDS);
-                int exitCode = process.exitValue();
-
-                if (!finished) {
-                    process.destroyForcibly();
-                    throw new Exception("FFmpeg timed out (exit code: " + exitCode + ")");
-                }
-
-                if (exitCode != 0) {
-                    throw new Exception("FFmpeg failed (exit code: " + exitCode + ")");
-                }
-
-                return null;
+                return result.toString();
             }
         };
 
         task.setOnSucceeded(e -> {
             webpStatusLabel.textProperty().unbind();
-            webpStatusLabel.setText("Saved: " + outputFile.getName());
+            webpStatusLabel.setText(task.getValue());
         });
 
         task.setOnFailed(e -> {
@@ -204,7 +184,7 @@ public class WebpController {
     }
 
     /**
-     * Checks image size to ensure it meets WebP format constraints.
+     * Validates that the image size does not exceed WebP maximum dimensions.
      */
     private boolean checkImageSizeWithinWebpLimits(File file) {
         try {
@@ -222,7 +202,7 @@ public class WebpController {
     }
 
     /**
-     * Displays icons for selected image files in the preview container.
+     * Displays preview icons in the UI based on file extension.
      */
     private void showMultipleIcons(List<File> files) {
         webpImagePreviewContainer.getChildren().clear();
@@ -244,7 +224,7 @@ public class WebpController {
     }
 
     /**
-     * Returns the file extension of the given file, in lowercase.
+     * Returns the file extension in lowercase.
      */
     private String getFileExtension(File file) {
         String name = file.getName();

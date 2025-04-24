@@ -86,6 +86,12 @@ public class PngJpgController {
         // File chooser button
         selectFileButton.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
+            chooser.setTitle("Select PNG or JPG files");
+
+            chooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+            );
+
             selectedFiles = chooser.showOpenMultipleDialog(new Stage());
             if (selectedFiles != null && !selectedFiles.isEmpty()) {
                 convertButton.setDisable(false);
@@ -93,6 +99,7 @@ public class PngJpgController {
                 showMultipleIcons(selectedFiles);
             }
         });
+
 
         // Handle drag events for file drop zone
         dropZone.setOnDragOver(e -> {
@@ -158,22 +165,33 @@ public class PngJpgController {
             suffix = "_converted";
         }
 
+        StringBuilder result = new StringBuilder("Files converted:\n");
+
         for (File file : selectedFiles) {
             try {
                 String baseName = file.getName().replaceAll("\\.[^.]+$", "");
                 File outputFile = new File(file.getParent() + File.separator + baseName + suffix + "." + format);
                 converter.convert(file, format, outputFile, quality);
-                statusLabel.setText("Saved: " + outputFile.getName());
+
+                result.append("• ").append(outputFile.getName()).append("\n");
 
                 dbManager.insertHistory(new ConversionHistory(
-                        file.getName(), getFileExtension(file), format, "Success", LocalDateTime.now()
+                        file.getName(),
+                        getFileExtension(file),
+                        format,
+                        "Success",
+                        LocalDateTime.now()
                 ));
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Conversion failed for file: " + file.getName(), ex);
-                statusLabel.setText("Failed: " + ex.getMessage());
+                result.append("× ").append(file.getName())
+                        .append(" (Failed: ").append(ex.getMessage()).append(")\n");
             }
         }
+
+        statusLabel.setText(result.toString());
     }
+
 
     /**
      * Displays icons for each selected file in the preview area.

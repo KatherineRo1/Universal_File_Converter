@@ -1,4 +1,4 @@
-package controller.image;
+package controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

@@ -163,11 +163,11 @@ public class MainController {
         try {
             subcategoryMenu.getChildren().clear();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/text/TextView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/text/txt.fxml"));
             Node view = loader.load();
             contentArea.getChildren().setAll(view);
 
-            addSubcategoryButton("TXT → XLSX", () -> loadTextSubcategory("/fxml/text/TextView.fxml"));
+            addSubcategoryButton("TXT → XLSX", () -> loadTextSubcategory("/fxml/text/txt.fxml"));
             addSubcategoryButton("CSV → XLSX", () -> loadTextSubcategory("/fxml/text/csv.fxml"));
             addSubcategoryButton("PNG → PDF", () -> loadTextSubcategory("/fxml/text/png_to_pdf.fxml"));
 
@@ -175,7 +175,7 @@ public class MainController {
             logger.info("Loaded text converter view with subcategories.");
 
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to load TextView.fxml", e);
+            logger.log(Level.SEVERE, "Failed to load txt.fxml", e);
             showError("Failed to load the text converter interface.");
         }
     }
@@ -187,27 +187,46 @@ public class MainController {
      */
     @FXML
     private void onAudioClick() {
-        logger.info("Audio converter view requested (not yet implemented).");
-        // TODO: Implement audio converter
+        try {
+            subcategoryMenu.getChildren().clear(); // Clear the side menu
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/audio/audio.fxml"));
+            Node view = loader.load(); // Load the Audio Converter UI
+            contentArea.getChildren().setAll(view); // Display it in the center pane
+
+            logger.info("Audio converter view loaded.");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load audio.fxml", e);
+            showError("Failed to load the audio converter interface.");
+        }
     }
+
 
     /**
      * Placeholder for loading the Video converter category.
-     * To be implemented later.
      */
     @FXML
-    private void onVideoClick() {
-        logger.info("Video converter view requested (not yet implemented).");
-        // TODO: Implement video converter
-    }
+    public void onVideoClick() {
+        try {
+            subcategoryMenu.getChildren().clear();
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/video/video.fxml"));
+            Node view = loader.load();
+            contentArea.getChildren().setAll(view);
+
+            logger.info("Video converter view loaded.");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load video.fxml", e);
+            showError("Failed to load the video converter interface.");
+        }
+    }
     /**
      * Loads the conversion history view (history.fxml) into the main content area.
      */
     @FXML
     private void onHistoryClick() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/image/history.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/history.fxml"));
             Node historyView = loader.load();
             contentArea.getChildren().setAll(historyView);
             subcategoryMenu.getChildren().clear();

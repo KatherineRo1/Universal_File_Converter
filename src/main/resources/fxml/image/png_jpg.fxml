@@ -48,7 +48,7 @@
 
         <!-- File selection and conversion buttons stacked -->
         <VBox spacing="10" alignment="CENTER">
-            <Button fx:id="selectFileButton" text="Select Image File" styleClass="main-button"/>
+            <Button fx:id="selectFileButton" text="Select PNG/JPG Files" styleClass="main-button"/>
             <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
         </VBox>
     </VBox>

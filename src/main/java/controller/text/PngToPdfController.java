@@ -161,7 +161,7 @@ public class PngToPdfController {
             File outputFile = FileUtils.generateOutputPath(selectedFiles.get(0), "pdf");
             PngPdfConverter.convertMultipleImagesToPdf(selectedFiles, rotationMap, outputFile, compress);
 
-            statusLabel.setText("PDF created successfully: " + outputFile.getAbsolutePath());
+            statusLabel.setText("PDF created successfully: " + outputFile.getName());
 
             dbManager.insertHistory(new ConversionHistory(
                     outputFile.getName(), "png/jpg", "pdf", "Success", LocalDateTime.now()

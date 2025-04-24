@@ -3,7 +3,10 @@ package controller.text;
 import converter.text.TextConverter;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -14,19 +17,22 @@ import util.Logger;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for converting TXT files to XLSX format using a custom converter.
  * Supports drag-and-drop, manual file selection, and configurable delimiter options.
  */
-public class TextConverterController {
+public class TxtToXlsxController {
 
     private final TextConverter converter = new TextConverter();              // Converter logic for TXT → XLSX
     private final DatabaseManager dbManager = new DatabaseManager();          // Handles conversion history saving
+
+    private final List<File> selectedFiles = new ArrayList<>();               // Currently selected input files
     public VBox txtToXlsxPane;
-    private File selectedFile;                                                // Currently selected input file
 
     @FXML private ComboBox<String> delimiterComboBox;                         // Drop-down to choose delimiter
     @FXML private TextField customDelimiterField;                             // Field for custom delimiter input
@@ -34,6 +40,8 @@ public class TextConverterController {
     @FXML private Button convertButton;                                       // Button to start conversion
     @FXML private Label statusLabel;                                          // Label to display status messages
     @FXML private StackPane dropZone;                                         // Drag-and-drop file input area
+    @FXML private Label dropLabel;                                            // Label inside drop zone
+    @FXML private HBox fileIconsContainer;                                    // Container for file icons
     /**
      * Initializes UI components and sets up all event listeners.
      */
@@ -46,8 +54,7 @@ public class TextConverterController {
         // Show custom input field only if "Custom" is selected
         delimiterComboBox.setOnAction(event -> {
             String selected = delimiterComboBox.getValue();
-            boolean isCustom = selected != null && selected.equals("Custom");
-            customDelimiterField.setVisible(isCustom);
+            customDelimiterField.setVisible("Custom".equals(selected));
         });
 
         // Set up drag-and-drop zone events
@@ -56,7 +63,7 @@ public class TextConverterController {
 
         // Button actions
         selectFileButton.setOnAction(e -> openFileChooser());
-        convertButton.setOnAction(e -> convertFile());
+        convertButton.setOnAction(e -> convertFiles());
     }
 
     /**
@@ -70,30 +77,35 @@ public class TextConverterController {
     }
 
     /**
-     * Processes a dropped file and accepts only .txt files.
+     * Processes dropped files, accepting only the first .txt file.
+     * Only one file is allowed.
      */
     private void handleFileDrop(DragEvent event) {
         Dragboard db = event.getDragboard();
-        boolean success = false;
 
         if (db.hasFiles()) {
-            File file = db.getFiles().get(0);
-            if (FileUtils.getExtension(file).equalsIgnoreCase("txt")) {
-                selectedFile = file;
+            selectedFiles.clear();
+            fileIconsContainer.getChildren().clear();
+
+            File file = db.getFiles().get(0); // Accept only the first file
+            if ("txt".equalsIgnoreCase(FileUtils.getExtension(file))) {
+                selectedFiles.add(file);
+                addFileIcon();
                 convertButton.setDisable(false);
-                statusLabel.setText("File loaded: " + file.getName());
-                success = true;
+                dropLabel.setVisible(false);
+                statusLabel.setText("1 file loaded");
             } else {
-                statusLabel.setText("Please drop a .txt file");
+                statusLabel.setText("Only .txt files are accepted");
             }
         }
 
-        event.setDropCompleted(success);
+        event.setDropCompleted(true);
         event.consume();
     }
 
     /**
      * Opens a file chooser dialog to manually select a .txt file.
+     * Multiple selection disabled.
      */
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
@@ -104,19 +116,22 @@ public class TextConverterController {
 
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            selectedFile = file;
+            selectedFiles.clear();
+            fileIconsContainer.getChildren().clear();
+            selectedFiles.add(file);
+            addFileIcon();
             convertButton.setDisable(false);
-            statusLabel.setText("File selected: " + file.getName());
+            dropLabel.setVisible(false);
+            statusLabel.setText("1 file selected");
         }
     }
 
     /**
      * Performs the TXT → XLSX conversion using internal logic.
-     * Validates inputs and delimiter settings, then writes output to a file.
      */
-    private void convertFile() {
-        if (selectedFile == null) {
-            statusLabel.setText("Please select a text file first.");
+    private void convertFiles() {
+        if (selectedFiles.isEmpty()) {
+            statusLabel.setText("Please select text file first.");
             return;
         }
 
@@ -126,7 +141,6 @@ public class TextConverterController {
             return;
         }
 
-        // Resolve delimiter based on dropdown selection
         String delimiter = switch (selectedDelimiter) {
             case "Comma (,)" -> ",";
             case "Semicolon (;)" -> ";";
@@ -141,23 +155,30 @@ public class TextConverterController {
         }
 
         try {
-            // Prepare output file path and trigger conversion
-            File outputFile = FileUtils.generateOutputPath(selectedFile, "xlsx");
+            File inputFile = selectedFiles.get(0);
+            File outputFile = FileUtils.generateOutputPath(inputFile, "xlsx");
             converter.setDelimiter(delimiter);
-            converter.convertTxtToExcel(selectedFile, outputFile);
-
-            statusLabel.setText("File converted successfully:\n" + outputFile.getAbsolutePath());
+            converter.convertTxtToExcel(inputFile, outputFile);
 
             dbManager.insertHistory(new ConversionHistory(
-                    selectedFile.getName(),
-                    "txt",
-                    "xlsx",
-                    "Success",
-                    LocalDateTime.now()
+                    inputFile.getName(), "txt", "xlsx", "Success", LocalDateTime.now()
             ));
+
+            statusLabel.setText("File converted: " + outputFile.getName());
         } catch (Exception e) {
             statusLabel.setText("Conversion failed: " + e.getMessage());
             Logger.logError("Text conversion failed: " + e.getMessage());
         }
+    }
+
+    /**
+     * Adds an icon to the display for the selected TXT file.
+     */
+    private void addFileIcon() {
+        ImageView icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon_txt_file.png"))));
+        icon.setFitWidth(50);
+        icon.setFitHeight(50);
+        icon.setPreserveRatio(true);
+        fileIconsContainer.getChildren().add(icon);
     }
 }

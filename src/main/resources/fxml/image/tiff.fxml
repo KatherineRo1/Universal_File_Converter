@@ -30,7 +30,7 @@
 
     <!-- File selection and conversion controls -->
     <VBox spacing="10" alignment="CENTER">
-        <Button fx:id="selectTiffFileButton" text="Select TIFF File" styleClass="main-button"/>
+        <Button fx:id="selectTiffFileButton" text="Select TIFF Files" styleClass="main-button"/>
         <Button fx:id="convertTiffButton" text="Convert TIFF" styleClass="convert-button" disable="true"/>
     </VBox>
 

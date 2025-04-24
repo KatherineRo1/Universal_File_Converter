@@ -8,7 +8,7 @@
 -->
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.text.TextConverterController"
+            fx:controller="controller.text.TxtToXlsxController"
             stylesheets="@/css/styles.css">
 
     <HBox spacing="10"
@@ -31,12 +31,17 @@
             <Label text="TXT→XLSX Converter" styleClass="title-label"/>
 
             <!-- Drag and drop zone -->
+            <!-- Drag and drop zone -->
             <StackPane fx:id="dropZone"
                        styleClass="drop-zone"
                        prefHeight="200"
-                       maxWidth="600">
-                <Label text="Drag &amp; Drop text file here or use Select File" styleClass="drop-label"/>
+                       prefWidth="600">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label fx:id="dropLabel" text="Drag and drop TXT files here or click to select files"/>
+                    <HBox fx:id="fileIconsContainer" alignment="CENTER" spacing="10"/>
+                </VBox>
             </StackPane>
+
 
 
             <!-- Delimiter section -->
@@ -54,7 +59,7 @@
 
             <!-- Buttons section -->
             <VBox spacing="10" alignment="CENTER">
-                <Button fx:id="selectFileButton" text="Select Text File" styleClass="main-button"/>
+                <Button fx:id="selectFileButton" text="Select TXT File" styleClass="main-button"/>
                 <Button fx:id="convertButton" text="Convert" styleClass="convert-button" disable="true"/>
             </VBox>
 
