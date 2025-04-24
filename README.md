@@ -43,8 +43,10 @@ Universal File Converter is a cross-platform desktop application built in Java t
 
 ---
 
-## Screenshots
-Screenshots of the interface and features should be added here.
+## Documentation
+
+Full JavaDoc is available here:  
+[→ View JavaDoc](https://katherinero1.github.io/Universal_File_Converter/index.html)
 
 ---
 
